@@ -4,8 +4,8 @@ Streamlit-App designed to be a companion for Bloons Tower Defense 6.
 App created on 2024-10-03 by Codinghawk27.
 """
 
-import streamlit as st
 import numpy as np
+import streamlit as st
 
 PRIMARY_TOWERS = [
     "Dart Monkey",
@@ -14,6 +14,7 @@ PRIMARY_TOWERS = [
     "Tack Shooter",
     "Ice Monkey",
     "Glue Gunner",
+    "Desperado",
 ]
 MILITARY_TOWERS = [
     "Sniper Monkey",
@@ -71,6 +72,7 @@ MONKEY_IMAGES = {
     "Monkey Village": "images/monkey_village.png",
     "Engineer Monkey": "images/engineer_monkey.png",
     "Beast Handler": "images/beast_handler.png",
+    "Desperado": "images/desperado.png",
 }
 
 
@@ -123,13 +125,12 @@ def main() -> None:
                 image_display.image(MONKEY_IMAGES[monkey])
                 name_display.write(monkey)
 
-        if right.button(
-            "Reset selections", use_container_width=True, on_click=reset_selections
-        ):
+        if right.button("Reset selections", use_container_width=True, on_click=reset_selections):
             st.write("Selections resetted.")
 
 
-def initialize_session():
+def initialize_session() -> None:
+    """Initialize the streamlit session state."""
     if "selected_tower_categories" not in st.session_state:
         st.session_state["selected_tower_categories"] = TOWERS.keys()
     if "available_towers" not in st.session_state:
@@ -141,7 +142,8 @@ def initialize_session():
         st.session_state["selected_towers"] = st.session_state["available_towers"]
 
 
-def reset_selections():
+def reset_selections() -> None:
+    """Reset the tower selections and update the session state."""
     # Reset selections
     st.session_state["selected_tower_categories"] = TOWERS.keys()
     available_towers = []
@@ -159,10 +161,9 @@ def reset_selections():
     st.session_state["tower_multiselect"] = available_towers
 
 
-def callback_tower_category_multiselection():
-    st.session_state["selected_tower_categories"] = st.session_state[
-        "tower_category_multiselect"
-    ]
+def callback_tower_category_multiselection() -> None:
+    """Callback to select tower categories."""
+    st.session_state["selected_tower_categories"] = st.session_state["tower_category_multiselect"]
 
     available_towers = []
     for category in st.session_state["selected_tower_categories"]:
@@ -171,7 +172,8 @@ def callback_tower_category_multiselection():
     st.session_state["selected_towers"] = available_towers
 
 
-def callback_tower_multiselection():
+def callback_tower_multiselection() -> None:
+    """Callback to select single towers."""
     st.session_state["selected_towers"] = st.session_state["tower_multiselect"]
 
 
